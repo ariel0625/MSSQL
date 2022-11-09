@@ -1,0 +1,91 @@
+Data modeling： 
+
+[DDL(data definition language)]
+
+alter
+create
+drop : removes both a table's structure and data
+truncate : removes only the data, resets the Identity auto number, and cannot use a WHERE clause. A table's foreign key constraints must be dropped before using TRUNCATE
+delete : removes only the data, does not reset the Identity auto number
+
+＃create ERD Entity Relationship Diagram    
+Create table ….
+UNF, 1NF,2NF, 3NF
+
+
+
+[DML(data manipulation language)]
+
+select
+update
+delete
+insert
+BEGIN
+COMMIT
+ROLLBACK 
+nested stored procedures, error-handlings, and views
+
+
+
+[DCL(data control language)]
+Grant
+Deny 
+Revoke 設置或更新數據用戶的權限
+
+
+
+Functions：
+Built-in: the ones that you use most often
+User-defined: build function allow you to create custom algorithms, using control flow statements or built-in functions
+
+Stored Procedures:
+
+[PROCEDURE]
+Stored procedures are programming objects returning a SELECT like result set and optionally output parameters.
+
+CREATE PROCEDURE HumanResources.uspGetEmployeesTest2 @LastName nvarchar(50), @FirstName nvarchar(50) 
+AS SET NOCOUNT ON; SELECT FirstName, LastName, Department 
+FROM HumanResources.vEmployeeDepartmentHistory WHERE FirstName = @FirstName AND LastName = @LastName AND EndDate IS NULL; 
+GO 
+EXECUTE HumanResources.uspGetEmployeesTest2
+
+[TABLE]
+Tables are the basic data storage objects in a database. Views are virtual tables, pre-canned SELECTs.
+
+CREATE TABLE orders(
+       order_id INT NOT NULL,					
+      user_id INT,
+       product_id int,
+       PRIMARY KEY(order_id),
+       FOREIGN KEY(user_id) REFERENCES users(id),
+       FOREIGN KEY(product_id) REFERENCES products(id)); 
+					
+
+[WINDOW FUNCTIONS]
+
+ WITH month_rank AS (
+    SELECT 
+        Id, Month, 
+        SUM(Salary) OVER (PARTITION BY Id ORDER BY Month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS Salary,    
+        RANK() OVER (PARTITION BY Id ORDER BY Month DESC) AS rnk,
+        COUNT(Month) OVER (PARTITION BY Id) AS total_month
+    FROM Employee
+)
+
+＊＊row_number 單純編號排序用，一直往下加上序號 123
+Dense_number 排序一樣不跳過 1123  ～～很稠密粘人不跳過～～
+Rank 排名排序會跳過 1134 （N+2）
+
+＊＊PARTITION BY個別列出排名
+Group by 無法個別列出排名
+
+LAG 前一row(反應前一個)
+LEAD 下一row(找下一個)
+
+MySQL、MSSQL、PostgreSQL、SQLserver  關聯式資料庫 RDBMS
+NoSQL則是Redis、Mongodb  Document 文件形式資料庫 
+
+
+
+
+
